@@ -1,9 +1,10 @@
-#include "keymanager.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
 #include <stdint.h>
+
+#define KEYSIZE 32
 
 /*key should be 32 bytes (character) long, else it will be repeated / truncated*/
 /*if key is null, it will be randomly generated*/
@@ -73,7 +74,9 @@ void extractkeyfromfile(uint8_t *key, const char *filename) {
 	if (fclose(f) != 0) {
 		perror("Error while closing the file containing the key");
 	}
-	resizekey(key, (char *)key);
+	if (strlen((char *)key) < KEYSIZE) {
+		resizekey(key, (char *)key);
+	}
 }
 
 void viewkey(const uint8_t *key, unsigned int hex_format) {
